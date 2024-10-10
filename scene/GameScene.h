@@ -58,6 +58,9 @@ private: // メンバ変数
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
 
+	//弾のフラグ
+	bool isBulletShot_ = true;
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

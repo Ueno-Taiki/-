@@ -2,6 +2,7 @@
 
 #include "Model.h"
 #include "WorldTransform.h"
+#include "PlayerBullet.h"
 
 class Player{
 public:
@@ -23,8 +24,11 @@ public:
 	// 移動入力
 	void InputMove();
 
-	//弾を撃つ
-	void BulletShot();
+	//攻撃
+	void Attack();
+
+	//移動範囲
+	void MoveRange();
 
 private:
 	// モデル
@@ -35,7 +39,12 @@ private:
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 
-	// 速度
+	//速度
 	Vector3 velocity_ = {};
+
+	//弾
+	PlayerBullet* bullet_ = nullptr;
+	//弾のフラグ
+	bool isBulletShot_ = false;
 };
 
