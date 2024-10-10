@@ -45,14 +45,15 @@ private: // メンバ変数
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
+	// 3Dモデル
+	Model* model_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 
-	//3Dモデル
-	Model* model_ = nullptr;
-
-	// 自キャラ
+	//自キャラ
 	Player* player_ = nullptr;
+	//自キャラの3Dモデル
+	Model* modelPlayer_ = nullptr;
 
 	//ビュープロジェクション
 	ViewProjection viewProjection_;

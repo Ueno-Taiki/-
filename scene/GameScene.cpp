@@ -5,8 +5,8 @@
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
+	//3Dモデル解放
 	delete model_;
-	//自キャラの解放
 	delete player_;
 }
 
@@ -18,14 +18,14 @@ void GameScene::Initialize() {
 
 	//3Dモデルデータの生成
 	model_ = Model::Create();
-
-	//ファイルを指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("mario.jpg");
+	modelPlayer_ = Model::CreateFromOBJ("player", true);
 
 	//自キャラの生成
 	player_ = new Player();
+	//自キャラの座標
+	Vector3 playerPosition = {-30, 0, 0};
 	//自キャラの初期化
-	player_->Initialize(model_, textureHandle_);
+	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -64,7 +64,7 @@ void GameScene::Draw() {
 	/// </summary>
 	
 	//自キャラの描画
-	player_->Draw(viewProjection_);
+	player_->Draw();
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
