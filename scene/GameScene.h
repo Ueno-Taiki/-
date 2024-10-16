@@ -8,6 +8,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Player.h"
+#include "Enemy.h"
 
 /// <summary>
 /// ゲームシーン
@@ -54,6 +55,26 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 	//自キャラの3Dモデル
 	Model* modelPlayer_ = nullptr;
+
+	//敵の数
+	static inline const int MAX = 10;
+	//敵キャラ
+	std::list<Enemy*> enemies_;
+	//敵の位置
+	Vector3 enemyPostion_[MAX] = {
+	    {30.0f, 0.0f, 0.0f},
+        {25.0f, 1.0f, 0.0f},
+        {25.0f, 2.0f, 0.0f},
+        {0.0f,  0.0f, 0.0f},
+        {0.0f,  0.0f, 0.0f},
+	    {0.0f,  0.0f, 0.0f},
+        {0.0f,  0.0f, 0.0f},
+        {0.0f,  0.0f, 0.0f},
+        {0.0f,  0.0f, 0.0f},
+        {0.0f,  0.0f, 0.0f}
+    };
+	//敵キャラの3Dモデル
+	Model* modelEnemy_ = nullptr;
 
 	//ビュープロジェクション
 	ViewProjection viewProjection_;

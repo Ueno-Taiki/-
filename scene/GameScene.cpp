@@ -8,6 +8,11 @@ GameScene::~GameScene() {
 	//3Dモデル解放
 	delete model_;
 	delete player_;
+
+	// 敵削除
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
 }
 
 void GameScene::Initialize() {
@@ -16,24 +21,39 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	//3Dモデルデータの生成
+	// 3Dモデルデータの生成
 	model_ = Model::Create();
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
+	modelEnemy_ = Model::CreateFromOBJ("player", true);
 
-	//自キャラの生成
+	// 自キャラの生成
 	player_ = new Player();
-	//自キャラの座標
+	// 自キャラの座標
 	Vector3 playerPosition = {-30, 0, 0};
-	//自キャラの初期化
+	// 自キャラの初期化
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 
-	//ビュープロジェクションの初期化
+	for (int32_t i = 0; i < MAX; ++i) {
+		// 敵キャラの生成
+		Enemy* newEnemy = new Enemy();
+		// 敵キャラの座標
+		Vector3 enemyPosition = enemyPostion_[i];
+		// 敵キャラの初期化
+		newEnemy->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
+
+		enemies_.push_back(newEnemy);
+	}
+	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 }
 
 void GameScene::Update() {
 	//自キャラの更新
 	player_->Update();
+	//敵の更新
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
 }
 
 void GameScene::Draw() {
@@ -65,6 +85,11 @@ void GameScene::Draw() {
 	
 	//自キャラの描画
 	player_->Draw();
+
+	//敵キャラの描画
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw();
+	}
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
