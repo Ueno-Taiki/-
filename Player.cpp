@@ -1,7 +1,6 @@
 #include <cassert>
 #include "Player.h"
 #include "Input.h"
-#include "MathUtilityForText.h"
 
 void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
 	//NULLポインタチャック
@@ -83,4 +82,35 @@ void Player::MoveRange() {
 	if (worldTransform_.translation_.y >= 15) {
 		worldTransform_.translation_.y = 15;
 	}
+}
+
+//ワールド座標を取得
+Vector3 Player::GetWorldPosition() { 
+	//ワールド座標を入れる変数
+	Vector3 worldPos = {};
+	//ワールド行列の平行移動成文を取得
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+}
+
+//AABBを取得
+AABB Player::GetAABB() { 
+	Vector3 worldPos = GetWorldPosition();
+
+	AABB aabb = {};
+
+	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
+	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
+
+	return aabb; 
+}
+
+//衝突応用
+void Player::OnCollision(const Enemy* enemy) {
+	(void)enemy;
+	// 当たったら死ぬ
+	isDead_ = true;
 }

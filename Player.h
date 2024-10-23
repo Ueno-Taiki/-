@@ -3,6 +3,9 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "PlayerBullet.h"
+#include "MathUtilityForText.h"
+
+class Enemy;
 
 class Player{
 public:
@@ -30,6 +33,17 @@ public:
 	//移動範囲
 	void MoveRange();
 
+	//ワールド座標を取得
+	Vector3 GetWorldPosition();
+
+	//AABBを取得
+	AABB GetAABB();
+
+	PlayerBullet* GetBullet() { return bullet_; }
+
+	//衝突判定
+	void OnCollision(const Enemy* enemy);
+
 private:
 	// モデル
 	Model* model_ = nullptr;
@@ -46,5 +60,12 @@ private:
 	PlayerBullet* bullet_ = nullptr;
 	//弾のフラグ
 	bool isBulletShot_ = false;
+
+	//キャラクターの当たり判定サイズ
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+
+	//デスフラグ
+	bool isDead_ = false;
 };
 

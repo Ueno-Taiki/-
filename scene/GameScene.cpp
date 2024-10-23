@@ -1,5 +1,7 @@
 #include "GameScene.h"
 #include "TextureManager.h"
+#include "MathUtilityForText.h"
+#include "PlayerBullet.h"
 #include <cassert>
 
 GameScene::GameScene() {}
@@ -50,10 +52,22 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	//自キャラの更新
 	player_->Update();
+
 	//敵の更新
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
 	}
+
+	enemies_.remove_if([](Enemy* enemy) {
+		if (enemy->isDead()) {
+			delete enemy;
+			return true;
+		}
+		return false;
+	});
+
+	//全ての当たり判定を行う
+	CheckAllCollisions();
 }
 
 void GameScene::Draw() {
@@ -106,5 +120,60 @@ void GameScene::Draw() {
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
+#pragma endregion
+}
+
+//衝突判定
+void GameScene::CheckAllCollisions() {
+#pragma region 自キャラと敵キャラの当たり判定
+
+	{
+		//判定対象1と2の座標
+		AABB aabb1, aabb2;
+
+		//自キャラの座標
+		aabb1 = player_->GetAABB();
+
+		// 自キャラと敵キャラの当たり判定
+		for (Enemy* enemy : enemies_) {
+			// 敵の座標
+			aabb2 = enemy->GetAABB();
+
+			// AABB同士の交差判定
+			if (IsCollision(aabb1, aabb2)) {
+				//自キャラの衝突時コールバックを呼び出す
+				player_->OnCollision(enemy);
+				//敵の衝突時コールバックを呼び出す
+				enemy->OnCollision(player_);
+			}
+		}
+	}
+#pragma endregion
+
+#pragma region 自弾と敵キャラの当たり判定
+
+	{
+		// 判定対象1と2の座標
+		AABB aabb1, aabb2;
+
+		PlayerBullet* playerbullet = player_->GetBullet();
+
+		// 自弾の座標
+		aabb1 = playerbullet->GetAABB();
+
+		// 自キャラと敵キャラの当たり判定
+		for (Enemy* enemy : enemies_) {
+			// 敵の座標
+			aabb2 = enemy->GetAABB();
+
+			// AABB同士の交差判定
+			if (IsCollision(aabb1, aabb2)) {
+				// 自弾の衝突時コールバックを呼び出す
+				playerbullet->OnCollision(player_);
+				// 敵の衝突時コールバックを呼び出す
+				enemy->OnCollision(player_);
+			}
+		}
+	}
 #pragma endregion
 }
