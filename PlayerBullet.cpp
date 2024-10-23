@@ -1,5 +1,6 @@
 #include <cassert>
 #include "PlayerBullet.h"
+#include "Player.h"
 #include "TextureManager.h"
 
 void PlayerBullet::Initialize(Model* model, const Vector3& position) {
@@ -8,7 +9,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position) {
 
 	model_ = model;
 	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("uvChecker.png");
+	model_ = Model::CreateFromOBJ("player", true);
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -29,7 +30,7 @@ void PlayerBullet::Draw(const ViewProjection& viewProjection) {
 }
 
 //ワールド座標を取得
-Vector3 PlayerBullet::GetWorldPosition() { 
+Vector3 PlayerBullet::GetWorldPosition() const { 
 	// ワールド座標を入れる変数
 	Vector3 worldPos = {};
 	// ワールド行列の平行移動成文を取得
@@ -41,7 +42,7 @@ Vector3 PlayerBullet::GetWorldPosition() {
 }
 
 //AABBを取得
-AABB PlayerBullet::GetAABB() {
+AABB PlayerBullet::GetAABB() const {
 	Vector3 worldPos = GetWorldPosition();
 
 	AABB aabb = {};

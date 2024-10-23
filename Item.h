@@ -1,14 +1,10 @@
 #pragma once
-
 #include "Model.h"
 #include "WorldTransform.h"
-#include "MathUtilityForText.h"
-#include "ViewProjection.h"
 
-class Player;
-
-class Enemy {
+class Item {
 public:
+
 	/// </summary>
 	/// 初期化
 	/// </summary>
@@ -24,22 +20,7 @@ public:
 	/// </summary>
 	void Draw();
 
-	//ワールド座標を取得
-	Vector3 GetWorldPosition();
-
-	//AABBを取得
-	AABB GetAABB();
-
-	//衝突応答
-	void OnCollision(const Player* player);
-
-	//デスフラグのgetter
-	bool isDead() const { return isDead_; }
-
 private:
-	// スピード
-	static inline const float Speed = 0.05f;
-
 	// モデル
 	Model* model_ = nullptr;
 	ViewProjection* viewProjection_ = nullptr;
@@ -47,12 +28,8 @@ private:
 	WorldTransform worldTransform_;
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
-
-	//敵の当たり判定サイズ
-	static inline const float kWidth = 0.8f;
-	static inline const float kHeight = 0.8f;
-
-	//デスフラグ
-	bool isDead_ = false;
+	// 速度
+	Vector3 velocity_ = {};
+	// スピード
+	static inline const float Speed = 0.05f;
 };
-

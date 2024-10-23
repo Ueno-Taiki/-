@@ -9,7 +9,14 @@
 #include "WorldTransform.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Item.h"
+#include "SubBullet.h"
 #include "Skydome.h"
+
+enum class Phase {
+	kPlay,
+	kDeath
+};
 
 /// <summary>
 /// ゲームシーン
@@ -45,6 +52,8 @@ public: // メンバ関数
 	//衝突判定
 	void CheckAllCollisions();
 
+	bool IsFinished() const { return finished_; }
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -58,9 +67,22 @@ private: // メンバ変数
 	//自キャラ
 	Player* player_ = nullptr;
 	//自キャラの3Dモデル
-	Model* modelPlayer_ = nullptr;
-	// 弾のフラグ
-	bool isBulletShot_ = true;
+	Model* modelPlayer_life2_ = nullptr;
+	Model* modelPlayer_life1_ = nullptr;
+	Model* modelPlayer_life0_ = nullptr;
+
+	//アイテム
+	Item* item_ = nullptr;
+	//アイテムの3Dモデル
+	Model* modelItem = nullptr;
+	//アイテムフラグ
+	bool isGetItem_ = false;
+
+	SubBullet* subBullet_ = nullptr;
+	Model* modelSubBullet_ = nullptr;
+
+	Player* assist_ = nullptr;
+	Model* modelAssist_ = nullptr;
 
 	//敵の数
 	static inline const int MAX = 10;
@@ -86,6 +108,10 @@ private: // メンバ変数
 	Skydome* skydome_ = nullptr;
 	//天球の3Dモデル
 	Model* modelSkydome_ = nullptr;
+
+	bool finished_ = false;
+
+	Phase phase_;
 
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
