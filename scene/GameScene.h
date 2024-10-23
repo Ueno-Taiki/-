@@ -9,6 +9,7 @@
 #include "WorldTransform.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -58,6 +59,8 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 	//自キャラの3Dモデル
 	Model* modelPlayer_ = nullptr;
+	// 弾のフラグ
+	bool isBulletShot_ = true;
 
 	//敵の数
 	static inline const int MAX = 10;
@@ -79,11 +82,13 @@ private: // メンバ変数
 	//敵キャラの3Dモデル
 	Model* modelEnemy_ = nullptr;
 
+	//天球
+	Skydome* skydome_ = nullptr;
+	//天球の3Dモデル
+	Model* modelSkydome_ = nullptr;
+
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
-
-	//弾のフラグ
-	bool isBulletShot_ = true;
 
 	/// <summary>
 	/// ゲームシーン用

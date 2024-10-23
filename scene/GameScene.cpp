@@ -10,6 +10,7 @@ GameScene::~GameScene() {
 	//3Dモデル解放
 	delete model_;
 	delete player_;
+	delete modelSkydome_;
 
 	// 敵削除
 	for (Enemy* enemy : enemies_) {
@@ -23,10 +24,16 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	// 3Dモデルデータの生成
+	//3Dモデルデータの生成
 	model_ = Model::Create();
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
 	modelEnemy_ = Model::CreateFromOBJ("player", true);
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+
+	//天球を生成
+	skydome_ = new Skydome();
+	//天球の初期化
+	skydome_->Initialize(modelSkydome_, textureHandle_, &viewProjection_);
 
 	// 自キャラの生成
 	player_ = new Player();
@@ -45,6 +52,7 @@ void GameScene::Initialize() {
 
 		enemies_.push_back(newEnemy);
 	}
+
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 }
@@ -104,6 +112,9 @@ void GameScene::Draw() {
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
 	}
+
+	//天球の描画
+	skydome_->Draw();
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
